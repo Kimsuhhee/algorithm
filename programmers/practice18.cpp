@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <cctype>
 using namespace std;
 
 string solution(string s) {
@@ -17,25 +18,13 @@ string solution(string s) {
             continue;
         }
         if (cnt % 2 != 0) {
-            if (s[i] >= 'a' && s[i] <= 'z') {
-                int t = s[i] - 32;
-                char c = t;
-                answer += c;
-            }
-            else {
-                answer += s[i];
-            }
+            int n = s[i];
+            answer += toupper(n);
             cnt++;
         }
         else {
-            if (s[i] >= 'A' && s[i] <= 'Z') {
-                int t = s[i] + 32;
-                char c = t;
-                answer += c;
-            }
-            else {
-                answer += s[i];
-            }
+            int n = s[i];
+            answer += tolower(n);
             cnt++;
         }
     }
