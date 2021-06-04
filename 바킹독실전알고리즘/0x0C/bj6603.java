@@ -6,10 +6,9 @@ import java.util.StringTokenizer;
 
 public class bj6603 {
     static int k;
-    static int[]s = new int[14];
-    static boolean[]visited = new boolean[14];
-    static ArrayList<Integer>list = new ArrayList<>();
-    static StringBuilder sb = new StringBuilder();
+    static int[]lotto;
+    static ArrayList<Integer>list;
+    static StringBuilder sb;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -17,9 +16,16 @@ public class bj6603 {
         while(true) {
             StringTokenizer stk = new StringTokenizer(br.readLine(), " ");
             k = Integer.parseInt(stk.nextToken());
+
             if(k==0)break;
-            for (int i = 0; i < k; i++) list.add(Integer.parseInt(stk.nextToken()));
-            func(1, 0);
+
+            sb = new StringBuilder();
+            lotto = new int[6];
+            list = new ArrayList<>();
+            for (int i = 0; i < k; i++){
+                list.add(Integer.parseInt(stk.nextToken()));
+            }
+            func(0,0);
             System.out.println(sb);
         }
 
@@ -27,19 +33,16 @@ public class bj6603 {
 
     private static void func(int start, int n) {
         if(n==6){
-            for(int i=0;i<6;i++){
-                sb.append(s[i]+" ");
+            for(int i=0;i<n;i++){
+                sb.append(lotto[i]+" ");
             }
             sb.append("\n");
             return;
         }
-        for(int i=start;i<k;i++){
-            if(!visited[i]){
-                s[n] = list.get(i-1);
-                visited[i] = true;
-                func(i+1,n+1);
-                visited[i] = false;
-            }
+        for(int i=start;i<k;i++) {
+            lotto[n] = list.get(i);
+            func(i+1,n+1);
         }
+
     }
 }
