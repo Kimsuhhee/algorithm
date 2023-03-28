@@ -11,6 +11,7 @@ public class bj6087 {
     static char[][]map;
     static Queue<Point>q;
     static int[][]visited;
+    static boolean[][][] checked;
     static int[] dx = {0,0,1,-1};
     static int[] dy = {1,-1,0,0};
     public static void main(String[] args) throws IOException {
@@ -29,6 +30,8 @@ public class bj6087 {
             Arrays.fill(visited[i],Integer.MAX_VALUE);
         }
 
+        checked = new boolean[H*W + 1][H][W];
+
         for(int i=0;i<H;i++){
             String s = br.readLine();
             for(int j=0;j<W;j++){
@@ -39,7 +42,7 @@ public class bj6087 {
                         q.add(new Point(i,j,0,1));
                         q.add(new Point(i,j,0,2));
                         q.add(new Point(i,j,0,3));
-                        visited[i][j] = 0;
+                        visited[i][j] = -1;
                         f = true;
                     }else {
                         endX = i; endY = j;
@@ -53,31 +56,24 @@ public class bj6087 {
         while(!q.isEmpty()){
             Point cur = q.poll();
 
-            if(cur.x==endX && cur.y==endY){
-                answer = Math.min(answer,cur.cnt);
-                continue;
-            }
-
             for(int d=0;d<4;d++){
                 int nx = cur.x + dx[d];
                 int ny = cur.y + dy[d];
-                if(nx<0||ny<0||nx>=H||ny>=W)continue;
-                if(map[nx][ny]=='*')continue;
-                if(d==cur.dir){ //현재 방향과 같은방향이면 레이저 설치X
-                    if(visited[nx][ny]>=cur.cnt){
-                        visited[nx][ny] = cur.cnt;
-                        q.add(new Point(nx,ny,cur.cnt,cur.dir));
+                while(true){
+                    if(nx<0||ny<0||nx>=H||ny>=W)break;
+                    if(map[nx][ny]=='*')break;
+                    if(visited[nx][ny] == Integer.MAX_VALUE){
+                        visited[nx][ny] = visited[cur.x][cur.y] + 1;
+                        q.add(new Point(nx, ny, cur.cnt +1, cur.dir));
                     }
-                }else{ //현재 방향과 다르면 레이저 설치
-                    if(visited[nx][ny]>=cur.cnt+1){
-                        visited[nx][ny] = cur.cnt+1;
-                        q.add(new Point(nx,ny,cur.cnt+1,d));
-                    }
+                    nx += dx[d];
+                    ny += dy[d];
                 }
+
             }
 
         }
-        System.out.println(answer);
+        System.out.println(visited[endX][endY]);
 
     }
 
